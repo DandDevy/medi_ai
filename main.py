@@ -3,6 +3,7 @@ from flask import Flask,render_template,request,url_for
 #EDA Packages
 import pandas as pd
 import numpy as np
+import tensorflow as tf
 
 # ML Packages
 from sklearn.feature_extraction.text import CountVectorizer
@@ -10,9 +11,16 @@ from sklearn.naive_bayes import MultinomialNB
 
 app = Flask(__name__)
 
-@ap.rout("/doc")
+@app.route("/doc")
 def doc():
     return render_template("doc.html")
+
+@app.route("/tfversion")
+def tfversion():
+	tfversion = tf.__version__
+	print(tfversion)
+	return tfversion
+
 
 @app.route("/")
 def index():
