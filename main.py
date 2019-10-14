@@ -10,7 +10,9 @@ from sklearn.naive_bayes import MultinomialNB
 
 app = Flask(__name__)
 
-
+@ap.rout("/doc")
+def doc():
+    return render_template("doc.html")
 
 @app.route("/")
 def index():
