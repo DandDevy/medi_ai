@@ -11,7 +11,7 @@ from sklearn.naive_bayes import MultinomialNB
 
 app = Flask(__name__)
 
-@app.route("/doc")
+@app.route("/")
 def doc():
     return render_template("doc.html")
 
@@ -20,8 +20,13 @@ def tfversion():
 	tfversion = tf.__version__
 	return tfversion
 
+@app.route("/diabetes", methods=['POST'])
+def diabetes():
+    diabetes_model = tf.keras.models.load_model('models/diabetes_model')
+    return diabetes_model.summary()
 
-@app.route("/")
+
+@app.route("/index")
 def index():
 	return render_template("index.html")
 
