@@ -1,13 +1,8 @@
 from flask import Flask,render_template,request,url_for
-
 #EDA Packages
 import pandas as pd
 import numpy as np
 import tensorflow as tf
-
-# ML Packages
-from sklearn.feature_extraction.text import CountVectorizer
-from sklearn.naive_bayes import MultinomialNB
 
 app = Flask(__name__)
 
@@ -29,6 +24,10 @@ def diabetes():
 @app.route("/index")
 def index():
 	return render_template("index.html")
+
+
+if __name__ == '__main__':
+	app.run(host="0.0.0.0", port=5002)
 
 # @app.route("/",methods=['POST'])
 # def predict():
@@ -63,5 +62,4 @@ def index():
 	
 
 
-if __name__ == '__main__':
-	app.run(host="0.0.0.0", port=5002)
+
