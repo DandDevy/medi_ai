@@ -2,16 +2,17 @@
 author: Daniel Ashcroft
 purpose: host the the main.py
 """
-import os
+import os, time
+
+# medi_ai project details
+MAIN_FLASK_NAME = "main.py"
+RUN_MAIN_IN_BACKGROUND = False
+SLEEP_TIME_IN_SECONDS = 3
 
 # commands
 CURL = "curl"
 PYTHON = "python"
 PUT_IN_BACKGROUND = "&"
-
-# project details
-MAIN_FLASK_NAME = "main.py"
-RUN_MAIN_IN_BACKGROUND = False
 
 # routes
 TF_VERSION_ROUTE = "/tfversion"
@@ -102,15 +103,18 @@ def restartMain():
 
 
 def host():
-    if isMainRunning():
-        if isRemoteHostRunning():
-            print("FULL SUCCESS")
+    keepingHosting = True
+    while keepingHosting:
+        if isMainRunning():
+            if isRemoteHostRunning():
+                print("FULL SUCCESS")
+                time.sleep(SLEEP_TIME_IN_SECONDS)
+
+            else:
+                restartHosting()
 
         else:
-            restartHosting()
-
-    else:
-        restartMain()
+            restartMain()
 
 
 host()
