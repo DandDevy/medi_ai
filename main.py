@@ -1,3 +1,7 @@
+"""
+author: Daniel Ashcroft
+purpose: run a flask server for use machine learning models
+"""
 from flask import Flask,render_template,request,url_for
 #EDA Packages
 import pandas as pd
