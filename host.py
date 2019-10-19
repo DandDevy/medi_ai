@@ -7,7 +7,7 @@ import os, time
 # medi_ai project details
 MAIN_FLASK_NAME = "main.py"
 RUN_MAIN_IN_BACKGROUND = False
-SLEEP_TIME_IN_SECONDS = 3
+SLEEP_TIME_IN_SECONDS = 5
 
 # commands
 CURL = "curl"
@@ -91,7 +91,7 @@ def isRemoteHostRunning():
 
 
 def restartHosting():
-    pass
+    return True
 
 
 def restartMain():
