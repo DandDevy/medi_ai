@@ -17,6 +17,6 @@ then go to http://localhost:5002/
 To run remotely use python host.py while a VM for example.
 then go to https://medi-ai.serveo.net
 
-# WARNING THIS MAY ALREADY BE IN USE. 
+### WARNING THIS MAY ALREADY BE IN USE. 
 if that is the case, inside of host.py you can change the constant SITE_NAME = "medi-ai" to SITE_NAME = "WHATEVER_YOU_WANT"
 Then go to https://WHATEVER_YOU_WANT.serveo.net
