@@ -12,17 +12,32 @@ app = Flask(__name__)
 
 @app.route("/")
 def doc():
-    return render_template("doc.html")
+	return render_template("doc.html")
+
+@app.route("/arg")
+def testArgs():
+	language = request.args.get('language')#if key doesn't exist, returns None
+	framework = request.args['framework'] #if key doesn't exist, returns a 400, bad request error
+	website = request.args.get('website')
+	# better to use request.args.get(...) to avoid 400
+	#  they are of type str
+
+	# model = tf.keras.models.load_model("diabetes_model.h5")
+	# model.summary()
+
+	return '''<h1>The language value is: {}</h1>
+				<h1>The framework value is: {}</h1>
+			  <h1>The website value is: {}'''.format(language, framework, website)
 
 @app.route("/tfversion")
 def tfversion():
 	tfversion = tf.__version__
 	return tfversion
 
-@app.route("/diabetes", methods=['POST'])
+@app.route("/diabetes")
 def diabetes():
-    diabetes_model = tf.keras.models.load_model('models/diabetes_model')
-    return diabetes_model.summary()
+	diabetes_model = tf.keras.models.load_model('models/diabetes_model')
+	return diabetes_model.summary()
 
 
 @app.route("/index")
