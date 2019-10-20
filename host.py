@@ -18,7 +18,7 @@ DEBUG = False
 CURL = "curl"
 PYTHON = "python"
 PUT_IN_BACKGROUND = "&"
-SSH_R = "ssh-r"
+SSH_R = "ssh -R"
 
 # routes
 TF_VERSION_ROUTE = "/tfversion"
