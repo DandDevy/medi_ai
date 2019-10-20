@@ -10,7 +10,7 @@ import threading
 # medi_ai app details
 MAIN_FLASK_NAME = "main.py"
 RUN_MAIN_IN_THREAD = True
-SLEEP_TIME_IN_SECONDS = 5
+SLEEP_TIME_IN_SECONDS = 2
 HOST = "0.0.0.0"
 DEBUG = False
 
