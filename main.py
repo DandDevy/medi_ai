@@ -7,8 +7,16 @@ from flask import Flask,render_template,request,url_for
 import pandas as pd
 import numpy as np
 import tensorflow as tf
+from tensorflow.keras.models import load_model
+
+LOCAL_PORT_NUMBER = "5002"
+
+HOST_ADDRESS = "0.0.0.0"
+LOCAL_ADDRESS = "localhost"
 
 app = Flask(__name__)
+
+diabetes_model = load_model("diabetes_8255.h5")
 
 @app.route("/")
 def doc():
@@ -22,8 +30,8 @@ def testArgs():
 	# better to use request.args.get(...) to avoid 400
 	#  they are of type str
 
-	# model = tf.keras.models.load_model("diabetes_model.h5")
-	# model.summary()
+	# diabetes_model = tf.keras.models.load_model("diabetes_model.h5")
+	# diabetes_model.summary()
 
 	return '''<h1>The language value is: {}</h1>
 				<h1>The framework value is: {}</h1>
@@ -36,8 +44,14 @@ def tfversion():
 
 @app.route("/diabetes")
 def diabetes():
-	diabetes_model = tf.keras.models.load_model('models/diabetes_model')
-	return diabetes_model.summary()
+	va1 = request.args.get("vall")
+	single_x_test = [1,168,71,35,0,33.6,0.627,70]
+	q = diabetes_model.predict(np.array([single_x_test, ]))
+	res = q[0][0]
+	#     print(q[0][0])
+	#     qstring = q.tostring()
+	#     print(qstring)
+	return str(res)
 
 
 @app.route("/index")
@@ -48,39 +62,4 @@ def index():
 if __name__ == '__main__':
 	print("Starting...")
 	app.debug = False
-	app.run(host="0.0.0.0", port=5002)
-
-# @app.route("/",methods=['POST'])
-# def predict():
-# 	# Link to dataset from github
-# 	url = "https://raw.githubusercontent.com/Jcharis/Machine-Learning-Web-Apps/master/Youtube-Spam-Detector-ML-Flask-App/YoutubeSpamMergedData.csv"
-# 	df= pd.read_csv(url)
-# 	df_data = df[["CONTENT","CLASS"]]
-# 	# Features and Labels
-# 	df_x = df_data['CONTENT']
-# 	df_y = df_data.CLASS
-#     # Extract Feature With CountVectorizer
-# 	corpus = df_x
-# 	cv = CountVectorizer()
-# 	X = cv.fit_transform(corpus) # Fit the Data
-# 	from sklearn.model_selection import train_test_split
-# 	X_train, X_test, y_train, y_test = train_test_split(X, df_y, test_size=0.33, random_state=42)
-# 	#Naive Bayes Classifier
-# 	from sklearn.naive_bayes import MultinomialNB
-# 	clf = MultinomialNB()
-# 	clf.fit(X_train,y_train)
-# 	clf.score(X_test,y_test)
-# 	#Alternative Usage of Saved Model
-# 	# ytb_model = open("naivebayes_spam_model.pkl","rb")
-# 	# clf = joblib.load(ytb_model)
-#
-# 	if request.method == 'POST':
-# 		comment = request.form['comment']
-# 		data = [comment]
-# 		vect = cv.transform(data).toarray()
-# 		my_prediction = clf.predict(vect)
-# 	return render_template('results.html',prediction = my_prediction,comment = comment)
-	
-
-
-
+	app.run(host=LOCAL_ADDRESS, port=LOCAL_PORT_NUMBER)
