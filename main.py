@@ -44,14 +44,31 @@ def tfversion():
 
 @app.route("/diabetes")
 def diabetes():
-	va1 = request.args.get("vall")
-	single_x_test = [1,168,71,35,0,33.6,0.627,70]
-	q = diabetes_model.predict(np.array([single_x_test, ]))
-	res = q[0][0]
-	#     print(q[0][0])
-	#     qstring = q.tostring()
-	#     print(qstring)
-	return str(res)
+	try:
+		va0 = request.args.get("val0")
+		print("VAL0:", va0)
+		va1 = request.args.get("val1")
+		va2 = request.args.get("val2")
+		va3 = request.args.get("val3")
+		va4 = request.args.get("val4")
+		va5 = request.args.get("val5")
+		va6 = request.args.get("val6")
+		va7 = request.args.get("val7")
+
+		# http://localhost:5002/diabetes?val0=1&val1=152&val2=43&val3=43&val4=0&val5=55.0&val6=0.51&val7=70   returns    0.30901816
+
+		# single_x_test = [1,163,71,35,0,33.0,0.627,70]
+		# single_x_test = [int(val0),163,71,35,0,33.0,0.627,70]
+		single_x_test = [int(va0), int(va1), int(va2), int(va3), int(va4), float(va5), float(va6), int(va7)] #http://localhost:5002/diabetes?val0=1&val1=152&val2=43&val3=43&val4=0&val5=55.0&val6=0.51&val7=70
+		q = diabetes_model.predict(np.array([single_x_test]))
+		res = q[0][0]
+		#     print(q[0][0])
+		#     qstring = q.tostring()
+		#     print(qstring)
+		return str(res)
+	except Exception as e:
+		return str(e)
+
 
 
 @app.route("/index")
