@@ -54,8 +54,11 @@ def diabetes():
 		va5 = request.args.get("val5")
 		va6 = request.args.get("val6")
 		va7 = request.args.get("val7")
+		IsRound = request.args.get("round")
 
-		# http://localhost:5002/diabetes?val0=1&val1=152&val2=43&val3=43&val4=0&val5=55.0&val6=0.51&val7=70   returns    0.30901816
+		# http://localhost:5002/diabetes?val0=1&val1=152&val2=43&val3=43&val4=0&val5=55.0&val6=0.51&val7=70         returns    0.30901816
+		#http://localhost:5002/diabetes?val0=1&val1=152&val2=43&val3=43&val4=0&val5=55.0&val6=0.51&val7=50&round=1  returns 0
+		#http://localhost:5002/diabetes?val0=1&val1=152&val2=43&val3=43&val4=0&val5=55.0&val6=0.51&val7=30&round=1  returns 1
 
 		# single_x_test = [1,163,71,35,0,33.0,0.627,70]
 		# single_x_test = [int(val0),163,71,35,0,33.0,0.627,70]
@@ -65,6 +68,10 @@ def diabetes():
 		#     print(q[0][0])
 		#     qstring = q.tostring()
 		#     print(qstring)
+
+		if IsRound == "1":
+			res = round(float(res))
+
 		return str(res)
 	except Exception as e:
 		return str(e)
