@@ -127,7 +127,7 @@ def isRemoteHostRunning():
     :rtype: bool
     """
     site = getRemoteAddress()
-    if(checkCmd(CURL + site + TF_VERSION_ROUTE,TFVERSION_SUCCESS)):
+    if checkCmd(CURL + site + TF_VERSION_ROUTE, TFVERSION_SUCCESS):
         return True
 
     else:
@@ -161,14 +161,13 @@ def host():
 host()
 
 
-print(ngrok.__version__)
-ngrok.set_auth_token("1TTXNeGKwPFs8dcfGAnN5ZpWEyr_KJacFQ46phLLhq6WunWb")
+# print(ngrok.__version__)
 
-
-
-public_url = ngrok.connect(5002)
-
-tunnels = ngrok.get_tunnels()
-print(tunnels)
-print("public_url:", public_url)
-print("public_url:", type(public_url))
+#
+#
+# public_url = ngrok.connect(5002)
+#
+# tunnels = ngrok.get_tunnels()
+# print(tunnels)
+# print("public_url:", public_url)
+# print("public_url:", type(public_url))
