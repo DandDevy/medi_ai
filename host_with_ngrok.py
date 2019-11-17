@@ -5,10 +5,11 @@ purpose: host the the main.py
 import os, time, requests, json
 from main import app
 from concurrent.futures import ThreadPoolExecutor
+from multiprocessing import Process
 from pyngrok import ngrok
 
 # thread details
-MAX_THREAD_POOL_WORKERS = 2
+MAX_THREAD_POOL_WORKERS = 4
 
 # medi_ai app details
 MAIN_FLASK_NAME = "main.py"
@@ -39,6 +40,11 @@ NGROK_LOCAL_SERVER = "http://localhost:4040"
 NGROK_LOCAL_SERVER_TUNNEL_ROUTE = NGROK_LOCAL_SERVER +"/api/tunnels"
 NGROK_CALL = "ngrok http " + LOCAL_PORT_NUMBER
 
+
+#medi_screen
+MEDI_SCREEN_WEBSITE = "http://mediscreen.tech"
+MEDI_SCREEN_UPDATE_URL = MEDI_SCREEN_WEBSITE + "/updateURL.php?url="
+MEDI_SCREEN_WEBSITE_UPDATE_URL_SUCCESS_RESULT = "Update received"
 
 
 
@@ -107,10 +113,8 @@ def manageMain():
 def getRemoteAddress():
 
     try:
-        time.sleep(SLEEP_TIME_IN_SECONDS)
         tunnel_url = requests.get(NGROK_LOCAL_SERVER_TUNNEL_ROUTE).text
         j = json.loads(tunnel_url)
-        print(j)
         tunnel_url = j['tunnels'][0]['public_url']  # Do the parsing of the get
         tunnel_url = tunnel_url.replace("https", "http")
         return tunnel_url
@@ -127,10 +131,13 @@ def isRemoteHostRunning():
     :rtype: bool
     """
     site = getRemoteAddress()
-    if checkCmd(CURL + site + TF_VERSION_ROUTE, TFVERSION_SUCCESS):
+    print("\n\n\nREMOTE ADDRESS : " + site + "\n\n\n")
+    if checkCmd(CURL + " " + site + TF_VERSION_ROUTE, TFVERSION_SUCCESS):
+        print("the website is HOSTING!")
         return True
 
     else:
+        print("the website isn't HOSTING!")
         return False
 
 def restartHosting():
@@ -139,7 +146,21 @@ def restartHosting():
     :return:
     :rtype:
     """
+    print("going to call:", NGROK_CALL)
     cmd(NGROK_CALL)
+
+def inform_website_of_site_name_change():
+    try:
+        url = getRemoteAddress()
+        res = requests.get(MEDI_SCREEN_UPDATE_URL + url)
+        if res == MEDI_SCREEN_WEBSITE_UPDATE_URL_SUCCESS_RESULT:
+            print(res)
+
+        else:
+            print("\n\n\n\n---FAILURE ON WEBSITE UPDATE OF URL CHANGE -------\n\n\n")
+    except Exception as e:
+        print(e)
+
 
 
 def manageHosting():
@@ -149,16 +170,22 @@ def manageHosting():
         if not isRemoteHostRunning():
             print("restarting hosting")
             restartHosting()
-
+            time.sleep(SLEEP_TIME_IN_SECONDS)
+            inform_website_of_site_name_change()
         time.sleep(SLEEP_TIME_IN_SECONDS)
 
 
 def host():
     executor = ThreadPoolExecutor(max_workers=MAX_THREAD_POOL_WORKERS)
-    executor.submit(manageHosting)
     executor.submit(manageMain)
+    executor.submit(manageHosting)
+    # pMain = Process(target=manageMain)
+    # pMain.start()
+    # pHost = Process(target=manageHosting)
+    # pHost.start()
 
-host()
+
+# host()
 
 
 # print(ngrok.__version__)
