@@ -36,7 +36,6 @@ CHECK_LOCAL_TFVERSION = CURL + " " + LOCALHOST_TFVERSION
 
 # remote configurations
 remote_address = ""
-NGROK_SITE_ENDING = "ngrok.io"
 NGROK_LOCAL_SERVER = "http://localhost:4040"
 NGROK_LOCAL_SERVER_TUNNEL_ROUTE = NGROK_LOCAL_SERVER +"/api/tunnels"
 NGROK_CALL = "ngrok http " + LOCAL_PORT_NUMBER
@@ -48,8 +47,6 @@ MEDI_SCREEN_UPDATE_URL = MEDI_SCREEN_WEBSITE + "/updateURL.php?url="
 MEDI_SCREEN_WEBSITE_UPDATE_URL_SUCCESS_RESULT = "Update received"
 MEDI_SCREEN_WEBSITE_SUCCESS = "<Response [200]>"
 
-
-executor = ThreadPoolExecutor(max_workers=MAX_THREAD_POOL_WORKERS)
 
 
 def cmd(command):
@@ -116,15 +113,15 @@ def manageMain():
 
 def getRemoteAddress():
 
-    try:
-        tunnel_url = requests.get(NGROK_LOCAL_SERVER_TUNNEL_ROUTE).text
-        j = json.loads(tunnel_url)
-        tunnel_url = j['tunnels'][0]['public_url']  # Do the parsing of the get
-        tunnel_url = tunnel_url.replace("https", "http")
-        return tunnel_url
 
-    except:
-        return ""
+    tunnel_url = requests.get(NGROK_LOCAL_SERVER_TUNNEL_ROUTE).text
+    j = json.loads(tunnel_url)
+    print(j)
+    tunnel_url = j['tunnels'][0]['public_url']  # Do the parsing of the get
+    print(tunnel_url)
+    tunnel_url = tunnel_url.replace("https", "http")
+    return tunnel_url
+
 
 
 
@@ -136,7 +133,7 @@ def isRemoteHostRunning():
     """
     site = getRemoteAddress()
     print("\n\n\nREMOTE ADDRESS : " + site + "\n\n\n")
-    if NGROK_SITE_ENDING in getRemoteAddress():
+    if checkCmd(CURL + " " + site + TF_VERSION_ROUTE, TFVERSION_SUCCESS):
         print("the website is HOSTING!")
         return True
 
@@ -151,7 +148,7 @@ def restartHosting():
     :rtype:
     """
     print("going to call:", NGROK_CALL)
-    executor.submit(cmd(NGROK_CALL))
+    cmd(NGROK_CALL)
 
 def inform_website_of_site_name_change():
     try:
@@ -167,13 +164,15 @@ def inform_website_of_site_name_change():
     except Exception as e:
         print(e)
 
+def update_med_screen():
+    while True:
+        inform_website_of_site_name_change()
+        time.sleep(SLEEP_TIME_IN_SECONDS)
+
 
 
 def manageHosting():
     keepHosting = True
-    if isRemoteHostRunning():
-        inform_website_of_site_name_change()
-
     while keepHosting:
         print("Lets keep hosting")
         if not isRemoteHostRunning():
@@ -184,8 +183,9 @@ def manageHosting():
         time.sleep(SLEEP_TIME_IN_SECONDS)
 
 
-def host():
-    executor.submit(manageHosting)
+def run():
+    executor = ThreadPoolExecutor(max_workers=MAX_THREAD_POOL_WORKERS)
+    executor.submit(update_med_screen)
     executor.submit(manageMain)
     # pMain = Process(target=manageMain)
     # pMain.start()
@@ -193,7 +193,9 @@ def host():
     # pHost.start()
 
 
-host()
+# run()
+
+update_med_screen()
 
 
 # print(ngrok.__version__)

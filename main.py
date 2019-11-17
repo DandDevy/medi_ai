@@ -9,7 +9,7 @@ import numpy as np
 import tensorflow as tf
 from tensorflow.keras.models import load_model
 
-import host_with_ngrok
+# import host_with_ngrok
 
 LOCAL_PORT_NUMBER = "5002"
 
@@ -87,6 +87,6 @@ def index():
 
 if __name__ == '__main__':
 	print("Starting...")
-	host_with_ngrok.host()
+	# host_with_ngrok.inform_website_of_site_name_change()
 	app.debug = False
 	app.run(host=LOCAL_ADDRESS, port=LOCAL_PORT_NUMBER)
