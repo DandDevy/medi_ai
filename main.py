@@ -49,17 +49,57 @@ def tfversion():
 
 @app.route("/heart")
 def heart():
-	single_x_test = [52,1,0,125,212,0,1,168,0,1,2,2,3]
-	bigRes = heart_model.predict(np.array([single_x_test]))
-	res = bigRes[0][0]
-	return str(res)
+	try:
+		val0 = request.args.get("val0")
+		val1 = request.args.get("val1")
+		val2 = request.args.get("val2")
+		val3 = request.args.get("val3")
+		val4 = request.args.get("val4")
+		val5 = request.args.get("val5")
+		val6 = request.args.get("val6")
+		val7 = request.args.get("val7")
+		val8 = request.args.get("val8")
+		val9 = request.args.get("val9")
+		val10 = request.args.get("val10")
+		val11 = request.args.get("val11")
+		val12 = request.args.get("val12")
+
+		# heart?val0=52&val1=1&val2=0&val3=125&val4=212&val5=0&val6=1&val7=168&val8=0&val9=1&val10=2&val11=2&val12=3 returns 0.040595107
+
+
+		single_x_test = [int(val0), int(val1), int(val2), int(val3), int(val4), int(val5) , int(val6), int(val7), int(val8), int(val9), int(val10), int(val11), int(val12)]
+		# single_x_test = [71,0,0,112,149,0,1,125,0,1.6,1,0,2] returns 0.7353674
+		bigRes = heart_model.predict(np.array([single_x_test]))
+		res = bigRes[0][0]
+		return str(res)
+
+	except Exception as e:
+		return str(e)
 
 @app.route("/breast_cancer")
 def breast_cancer():
-	single_x_test = [20.57,17.77,132.9,1326,0.08474]
-	bigRes = breast_cancer_model.predict(np.array([single_x_test]))
-	res = bigRes[0][0]
-	return str(res)
+	try:
+		val0 = request.args.get("val0")
+		val1 = request.args.get("val1")
+		val2 = request.args.get("val2")
+		val3 = request.args.get("val3")
+		val4 = request.args.get("val4")
+		IsRound = request.args.get("round")
+
+		# breast_cancer?val0=17.99&val1=10.38&val2=122.8&val3=1001&val4=0.1184 returns 0.0068584555
+		# breast_cancer?val0=17.99&val1=10.38&val2=122.8&val3=1001&val4=0.1184&round=1 returns 0
+
+		single_x_test = [float(val0),float(val1),float(val2),int(val3),float(val4)]
+		bigRes = breast_cancer_model.predict(np.array([single_x_test]))
+		res = bigRes[0][0]
+
+		if IsRound == "1":
+			res = round(float(res))
+
+		return str(res)
+
+	except Exception as e:
+		return str(e)
 
 
 @app.route("/prostate_cancer")
