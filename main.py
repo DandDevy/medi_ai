@@ -63,14 +63,21 @@ def heart():
 		val10 = request.args.get("val10")
 		val11 = request.args.get("val11")
 		val12 = request.args.get("val12")
+		IsRound = request.args.get("round")
 
 		# heart?val0=52&val1=1&val2=0&val3=125&val4=212&val5=0&val6=1&val7=168&val8=0&val9=1&val10=2&val11=2&val12=3 returns 0.040595107
+
+		#http://309ce189.ngrok.io/heart?val0=52&val1=1&val2=0&val3=125&val4=212&val5=0&val6=1&val7=168&val8=0&val9=1&val10=2&val11=2&val12=3&round=1 returns 0
 
 
 		single_x_test = [int(val0), int(val1), int(val2), int(val3), int(val4), int(val5) , int(val6), int(val7), int(val8), int(val9), int(val10), int(val11), int(val12)]
 		# single_x_test = [71,0,0,112,149,0,1,125,0,1.6,1,0,2] returns 0.7353674
 		bigRes = heart_model.predict(np.array([single_x_test]))
 		res = bigRes[0][0]
+
+		if IsRound == "1":
+			res = round(float(res))
+
 		return str(res)
 
 	except Exception as e:
