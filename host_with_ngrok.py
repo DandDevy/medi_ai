@@ -48,6 +48,7 @@ MEDI_SCREEN_UPDATE_URL = MEDI_SCREEN_WEBSITE + "/updateURL.php?url="
 MEDI_SCREEN_WEBSITE_UPDATE_URL_SUCCESS_RESULT = "Update received"
 MEDI_SCREEN_WEBSITE_SUCCESS = "<Response [200]>"
 
+print("starting host with ngrok file...")
 
 executor = ThreadPoolExecutor(max_workers=MAX_THREAD_POOL_WORKERS)
 
