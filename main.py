@@ -10,6 +10,7 @@ import tensorflow as tf
 from tensorflow.keras.models import load_model
 
 # import host_with_ngrok
+from Logger import Logger
 
 LOCAL_PORT_NUMBER = "5002"
 
@@ -45,6 +46,11 @@ def testArgs():
 @app.route("/tfversion")
 def tfversion():
 	tfversion = tf.__version__
+	logger = Logger()
+	user_ip = request.remote_addr
+	log_type = "tfversion=" + str(tfversion)
+	logger.log(log_type, user_ip)
+
 	return tfversion
 
 @app.route("/heart")
@@ -75,6 +81,12 @@ def heart():
 		bigRes = heart_model.predict(np.array([single_x_test]))
 		res = bigRes[0][0]
 
+
+		logger = Logger()
+		user_ip = request.remote_addr
+		log_type = "heart={ input="+str(single_x_test) + ", res=" + str(res) + "}"
+		logger.log(log_type, user_ip)
+
 		if IsRound == "1":
 			res = round(float(res))
 
@@ -102,6 +114,11 @@ def breast_cancer():
 
 		if IsRound == "1":
 			res = round(float(res))
+
+		logger = Logger()
+		user_ip = request.remote_addr
+		log_type = "breast_cancer={ input="+str(single_x_test) + ", res=" + str(res) + "}"
+		logger.log(log_type, user_ip)
 
 		return str(res)
 
@@ -134,6 +151,11 @@ def prostate_cancer():
 
 		if IsRound == "1":
 			res = round(float(res))
+
+		logger = Logger()
+		user_ip = request.remote_addr
+		log_type = "prostate_cancer={ input="+str(single_x_test) + ", res=" + str(res) + "}"
+		logger.log(log_type, user_ip)
 
 		return str(res)
 
@@ -171,6 +193,11 @@ def diabetes():
 		if IsRound == "1":
 			res = round(float(res))
 
+		logger = Logger()
+		user_ip = request.remote_addr
+		log_type = "diabetes={ input="+str(single_x_test) + ", res=" + str(res) + "}"
+		logger.log(log_type, user_ip)
+
 		return str(res)
 	except Exception as e:
 		return str(e)
@@ -179,7 +206,20 @@ def diabetes():
 
 @app.route("/index")
 def index():
+	logger = Logger()
+	user_ip = request.remote_addr
+	logger.log("index", user_ip)
 	return render_template("index.html")
+
+@app.route("/log")
+def log():
+	# return "asd"
+	try:
+		logger = Logger()
+		user_ip = request.remote_addr
+		return logger.read()
+	except Exception as e:
+		return str(e)
 
 
 if __name__ == '__main__':
