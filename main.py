@@ -46,7 +46,7 @@ def testArgs():
 @app.route("/tfversion")
 def tfversion():
 	tfversion = tf.__version__
-	logger = Logger()
+	logger = Logger.getInstance()
 	user_ip = request.remote_addr
 	log_type = "tfversion=" + str(tfversion)
 	logger.log(log_type, user_ip)
@@ -82,7 +82,7 @@ def heart():
 		res = bigRes[0][0]
 
 
-		logger = Logger()
+		logger = Logger.getInstance()
 		user_ip = request.remote_addr
 		log_type = "heart={ input="+str(single_x_test) + ", res=" + str(res) + "}"
 		logger.log(log_type, user_ip)
@@ -115,7 +115,7 @@ def breast_cancer():
 		if IsRound == "1":
 			res = round(float(res))
 
-		logger = Logger()
+		logger = Logger.getInstance()
 		user_ip = request.remote_addr
 		log_type = "breast_cancer={ input="+str(single_x_test) + ", res=" + str(res) + "}"
 		logger.log(log_type, user_ip)
@@ -152,7 +152,7 @@ def prostate_cancer():
 		if IsRound == "1":
 			res = round(float(res))
 
-		logger = Logger()
+		logger = Logger.getInstance()
 		user_ip = request.remote_addr
 		log_type = "prostate_cancer={ input="+str(single_x_test) + ", res=" + str(res) + "}"
 		logger.log(log_type, user_ip)
@@ -193,7 +193,7 @@ def diabetes():
 		if IsRound == "1":
 			res = round(float(res))
 
-		logger = Logger()
+		logger = Logger.getInstance()
 		user_ip = request.remote_addr
 		log_type = "diabetes={ input="+str(single_x_test) + ", res=" + str(res) + "}"
 		logger.log(log_type, user_ip)
@@ -206,7 +206,7 @@ def diabetes():
 
 @app.route("/index")
 def index():
-	logger = Logger()
+	logger = Logger.getInstance()
 	user_ip = request.remote_addr
 	logger.log("index", user_ip)
 	return render_template("index.html")
@@ -215,7 +215,7 @@ def index():
 def log():
 	# return "asd"
 	try:
-		logger = Logger()
+		logger = Logger.getInstance()
 		user_ip = request.remote_addr
 		return logger.read()
 	except Exception as e:
