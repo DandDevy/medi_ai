@@ -1,7 +1,7 @@
 from unittest import TestCase
 import requests
 
-REMOTE_ADDRESS = "https://973d5729.ngrok.io"
+REMOTE_ADDRESS = "https://2fc88f82.ngrok.io"
 
 
 class TestRemote(TestCase):
